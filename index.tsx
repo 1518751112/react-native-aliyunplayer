@@ -8,9 +8,20 @@ export enum IScaleMode {
     SCALETOFILL = 2,
 }
 
+export interface sourceConfig{
+    type?:string //url , sts , auth
+    url?:string
+    vid?:string
+    playAuth?:string
+    region?:string
+    accessKeyId?:string
+    accessKeySecret?:string
+    securityToken?:string
+}
+
 export interface AliPlayerProps {
     style?: StyleProp<ViewStyle>;
-    source: string; // 播放地址
+    source: sourceConfig; // 播放配置
     setAutoPlay?: boolean; // 是否自动播放
     setLoop?: boolean; // 是否循环播放
     setMute?: boolean; //是否静音

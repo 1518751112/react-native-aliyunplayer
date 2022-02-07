@@ -15,8 +15,9 @@ import com.aliyun.player.bean.InfoBean;
 import com.aliyun.player.bean.InfoCode;
 import com.aliyun.player.nativeclass.PlayerConfig;
 import com.aliyun.player.nativeclass.TrackInfo;
-import com.aliyun.player.source.UrlSource;
+import com.aliyun.player.source.*;
 import com.facebook.react.bridge.Arguments;
+import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
@@ -32,6 +33,7 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.HashMap;
 
 public class RNAliPlayerManager extends ViewGroupManager<AliSurfaceView> {
     public static List<AliSurfaceView> videoViews;
@@ -151,14 +153,76 @@ public class RNAliPlayerManager extends ViewGroupManager<AliSurfaceView> {
 
     //设置播放源
     @ReactProp(name = "source")
-    public void setSrc(AliSurfaceView view, String src) {
-        Log.i(TAG, "setSrc: " + src);
-        try {
-            UrlSource source = new UrlSource();
-            String sourceStr = src.replaceAll(" ", "%20");
+    public void setSrc(AliSurfaceView view, ReadableMap config) {
+        HashMap map = config.toHashMap();
+        String type = ""; //url , sts , auth
+        String url = "";
+        String vid = "";
+        String playAuth = "";
+        String region = "";
+        String accessKeyId = "";
+        String accessKeySecret = "";
+        String securityToken = "";
 
-            source.setUri(sourceStr);
-            view.aliyunVodPlayer.setDataSource(source);
+        if(config.hasKey("type")){
+            type =(String) map.get("type");
+        }
+
+        if(config.hasKey("url")){
+            url =(String) map.get("url");
+        }
+
+        if(config.hasKey("vid")){
+            vid =(String) map.get("vid");
+        }
+        if(config.hasKey("playAuth")){
+            playAuth =(String) map.get("playAuth");
+        }
+        if(config.hasKey("region")){
+            region =(String) map.get("region");
+        }
+        if(config.hasKey("accessKeyId")){
+            accessKeyId =(String) map.get("accessKeyId");
+        }
+        if(config.hasKey("accessKeySecret")){
+            accessKeySecret =(String) map.get("accessKeySecret");
+        }
+        if(config.hasKey("securityToken")){
+            securityToken =(String) map.get("securityToken");
+        }
+
+        Log.i(TAG, "setType: " + type);
+        try {
+            switch (type){
+                case "url":
+                    UrlSource source = new UrlSource();
+                    String sourceStr = url.replaceAll(" ", "%20");
+
+                    source.setUri(sourceStr);
+                    view.aliyunVodPlayer.setDataSource(source);
+                    break;
+
+                case "sts":
+                    VidSts sourceSts = new VidSts();
+
+                    sourceSts.setVid(vid);
+                    sourceSts.setAccessKeyId(accessKeyId);
+                    sourceSts.setAccessKeySecret(accessKeySecret);
+                    sourceSts.setSecurityToken(securityToken);
+                    sourceSts.setRegion(region);
+                    view.aliyunVodPlayer.setDataSource(sourceSts);
+                    break;
+                case "auth":
+                    VidAuth sourceAuth = new VidAuth();
+                    sourceAuth.setVid(vid);
+                    sourceAuth.setPlayAuth(playAuth);
+                    sourceAuth.setRegion(region);
+                    view.aliyunVodPlayer.setDataSource(sourceAuth);
+                    break;
+                default:
+                    return ;
+            }
+
             view.aliyunVodPlayer.prepare();
         }catch (Exception e) {
             e.printStackTrace();
@@ -514,7 +578,7 @@ public class RNAliPlayerManager extends ViewGroupManager<AliSurfaceView> {
             }
         });
     }
-    
+
     public void stopAllVideo() {
         if (RNAliPlayerManager.videoViews != null && RNAliPlayerManager.videoViews.size() > 0) {
             for (int i = 0; i < RNAliPlayerManager.videoViews.size(); i++) {
@@ -530,3 +594,5 @@ public class RNAliPlayerManager extends ViewGroupManager<AliSurfaceView> {
         stopAllVideo();
     }
 }
+
+
