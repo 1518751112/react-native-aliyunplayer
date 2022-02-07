@@ -1,13 +1,13 @@
 {
   "name": "@tg1518/react-native-lewin-aliyunplayer",
-  "version": "1.0.9",
+  "version": "1.1.0",
   "description": "阿里云视频播放器，react native版本",
   "main": "main.js",
   "nativePackage": true,
   "scripts": {},
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/LewinJun/react-native-aliyunplayer.git"
+    "url": "git+https://github.com/1518751112/react-native-aliyunplayer.git"
   },
   "keywords": [
     "video",
@@ -54,12 +54,12 @@
     "react-native-aliyunplayer.podspec"
   ],
   "bugs": {
-    "url": "https://github.com/LewinJun/react-native-aliyunplayer/issues"
+    "url": "https://github.com/1518751112/react-native-aliyunplayer/issues"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
   },
-  "homepage": "https://github.com/LewinJun/react-native-aliyunplayer#readme",
+  "homepage": "https://github.com/1518751112/react-native-aliyunplayer#readme",
   "dependencies": {
     "acorn": "^7.4.1",
     "acorn-jsx": "^5.3.2",

@@ -9,7 +9,7 @@
 
 ## Install
 ### 1: yarn add 或者npm install
-`yarn add react-native-lewin-aliyunplayer `
+`yarn add @tg1518/react-native-lewin-aliyunplayer `
 
 ### 2: android需要配置build.gradle maven {url 'https://maven.aliyun.com/repository/releases'}
 ```xml
@@ -37,10 +37,20 @@ allprojects {
 ## Usage
 ```javascript
 this.player?.startPlay() : this.player?.pausePlay()
+const authSource = {
+    type:'auth',
+    vid:"b0fbe08f.......65646b66988",
+    playAuth:"eyJTZWN1cml0eVRva2VuIjoi....",
+    region:"cn-shanghai"
+}
+const urlSource = {
+    type:'url',
+    url:'https://d-appimg.doctopia.com.cn/video/1626170384423967.mp4',
+}
 <AliPlayer
     ref={(e) => this.player = e}
     style={{ flex: 1 }}
-    source='https://d-appimg.doctopia.com.cn/video/1626170384423967.mp4'
+    source={urlSource}
     setAutoPlay={true}
     setLoop={true}
     onAliCurrentPositionUpdate={(e) => {
