@@ -33,6 +33,7 @@ allprojects {
     }
 }
 ```
+### 3: android使用安全下载功能需要替换 massets目录下的encryptedApp.dat解密文件
 
 ## Usage
 ```javascript

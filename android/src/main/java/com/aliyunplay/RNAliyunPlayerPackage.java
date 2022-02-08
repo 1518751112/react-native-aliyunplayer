@@ -17,6 +17,8 @@ public class RNAliyunPlayerPackage implements ReactPackage {
   public List<NativeModule> createNativeModules(ReactApplicationContext reactContext) {
         List<NativeModule> modules = new ArrayList<>();
 
+        //模块导出
+        modules.add(new SafeDownload(reactContext));
         return modules;
     }
 
