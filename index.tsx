@@ -1,14 +1,14 @@
 import React, { Component } from 'react'
-import { View, requireNativeComponent, findNodeHandle, StyleProp, ViewStyle, UIManager } from 'react-native'
+import { View, requireNativeComponent, findNodeHandle, StyleProp, ViewStyle, UIManager, NativeModules, NativeEventEmitter } from 'react-native'
 var AliyunPlayer = requireNativeComponent('RNAliplayer');
 
-export enum IScaleMode {
+enum IScaleMode {
     SCALEASPECTFIT = 0,
     SCALEASPECTFILL = 1,
     SCALETOFILL = 2,
 }
 
-export interface sourceConfig{
+interface sourceConfig{
     type?:string //url , sts , auth
     url?:string
     vid?:string
@@ -19,7 +19,7 @@ export interface sourceConfig{
     securityToken?:string
 }
 
-export interface AliPlayerProps {
+interface AliPlayerProps {
     style?: StyleProp<ViewStyle>;
     source: sourceConfig; // 播放配置
     setAutoPlay?: boolean; // 是否自动播放
@@ -52,11 +52,12 @@ export interface AliPlayerProps {
     onAliBitrateReady?: (e: AliPlayerFuncParams<{ index: number; width: number; height: number; bitrate: number }>) => void, // 获取清晰度回调
 }
 
-export interface AliPlayerFuncParams<T> {
+interface AliPlayerFuncParams<T> {
     nativeEvent: T
 }
 
-export default class AliPlayer extends Component<AliPlayerProps>{
+//播放器
+export class AliPlayer extends Component<AliPlayerProps>{
     // constructor(props: AliPlayerProps) {
     //   super(props)
 
@@ -126,3 +127,66 @@ export default class AliPlayer extends Component<AliPlayerProps>{
         )
     }
 }
+
+
+//下载器
+export class AliDow{
+    private vid:string;
+    private config:Config;
+    private index: number | undefined;
+    private callback:((schedule: any) => void) | undefined
+    private eventName = ["onPrepared","onDowProgress","onProcessing","onError","onCompletion"]
+    //onPrepared:预处理;onDowProgress:下载进度;onProcessing:处理进度;onError:错误信息; onCompletion:完成回调
+
+
+    constructor(config:Config) {
+        this.vid = config.vid
+        if(!config.region){
+            config.region = "cn-shanghai" //默认区域
+        }
+        this.config = config
+
+    }
+
+
+    //开始下载
+    public async dow(callback?:(res:any)=>void){
+        this.index = await NativeModules.RNSafeDow.init(this.config);
+        Count.size++
+        if(callback){
+            this.initEvent(callback)
+        }
+    }
+
+    //事件回调
+    private initEvent(callback:(res:any)=>void){
+        const eventEmitter = new NativeEventEmitter(NativeModules.ToastExample);
+
+        for (let i=0;i<this.eventName.length;i++) {
+            let key = this.eventName[i];
+            eventEmitter.addListener(key, (event) => {
+                if(this.vid==event.vid){
+                    callback({...event,type:key,index:Count.size})
+                }
+                // console.log(event) // "someValue"
+            })
+        }
+
+
+
+    }
+
+}
+
+interface Config{
+    path: string
+    vid:string
+    region?: string
+    playAuth:string
+}
+
+class Count{
+    static size:number = 0
+}
+
+export default {AliPlayer,AliDow}

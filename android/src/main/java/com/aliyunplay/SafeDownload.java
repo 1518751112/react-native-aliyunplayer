@@ -137,6 +137,7 @@ public class SafeDownload extends ReactContextBaseJavaModule {
                 WritableMap params = Arguments.createMap();
                 params.putString("url",mediaInfo.getCoverUrl());
                 params.putString("type",mediaInfo.getMediaType());
+                params.putInt("code",200);
                 params.putString("vid",vidAuth.getVid());
                 sendEvent(reactContext, "onPrepared", params);
             }
@@ -147,14 +148,16 @@ public class SafeDownload extends ReactContextBaseJavaModule {
                 //下载进度百分比
                 WritableMap params = Arguments.createMap();
                 params.putString("percent",percent+"");
+                params.putInt("code",200);
                 params.putString("vid",vidAuth.getVid());
-                sendEvent(reactContext, "onProgress", params);
+                sendEvent(reactContext, "onDowProgress", params);
             }
             @Override
             public void onProcessingProgress(int percent) {
                 //处理进度百分比
                 WritableMap params = Arguments.createMap();
                 params.putString("percent",percent+"");
+                params.putInt("code",200);
                 params.putString("vid",vidAuth.getVid());
                 sendEvent(reactContext, "onProcessing", params);
             }
@@ -171,6 +174,7 @@ public class SafeDownload extends ReactContextBaseJavaModule {
 
                 WritableMap params = Arguments.createMap();
                 params.putString("vid",vidAuth.getVid());
+                params.putInt("code",400);
                 params.putString("msg",errorInfo.getMsg());
                 sendEvent(reactContext, "onError", params);
 
@@ -189,6 +193,7 @@ public class SafeDownload extends ReactContextBaseJavaModule {
 
                 WritableMap params = Arguments.createMap();
                 params.putString("vid",vidAuth.getVid());
+                params.putInt("code",200);
                 params.putString("msg","下载完成");
                 sendEvent(reactContext, "onCompletion", params);
 

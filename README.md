@@ -35,8 +35,31 @@ allprojects {
 ```
 ### 3: android使用安全下载功能需要替换 massets目录下的encryptedApp.dat解密文件
 
-## Usage
+## 下载组件
 ```javascript
+import AliModule from "@tg1518/react-native-lewin-aliyunplayer";
+const {AliDow,AliPlayer} = AliModule
+
+const aliDow = new AliDow({ //auth下载
+    path:"保存地址",
+    vid:"视频id",
+    playAuth:"授权码"
+});
+
+//开始下载事件回调
+aliDow.dow((res)=>{ 
+    console.log(res,"事件")
+})
+
+```
+
+
+## 播放组件
+```javascript
+import AliModule from "@tg1518/react-native-lewin-aliyunplayer";
+const {AliDow,AliPlayer} = AliModule
+
+
 this.player?.startPlay() : this.player?.pausePlay()
 const authSource = {
     type:'auth',
