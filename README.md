@@ -43,14 +43,16 @@ const {AliDow,AliPlayer} = AliModule
 const aliDow = new AliDow({ //auth下载
     path:"保存地址",
     vid:"视频id",
-    playAuth:"授权码"
+    playAuth:"授权码",
+    name:"名称"
 });
 
 //开始下载事件回调
 aliDow.dow((res)=>{ 
     console.log(res,"事件")
 })
-
+//获取下载记录
+const logs = await aliDow.readJSON()
 ```
 
 
