@@ -62,7 +62,6 @@ import AliModule from "@tg1518/react-native-lewin-aliyunplayer";
 const {AliDow,AliPlayer} = AliModule
 
 
-this.player?.startPlay() : this.player?.pausePlay()
 const authSource = {
     type:'auth',
     vid:"b0fbe08f.......65646b66988",
@@ -73,6 +72,15 @@ const urlSource = {
     type:'url',
     url:'https://d-appimg.doctopia.com.cn/video/1626170384423967.mp4',
 }
+    
+this.player?.startPlay()// 开始播放
+this.player?.pausePlay()//暂停播放
+this.player?.stopPlay() //停止播放 会销毁组件
+this.player?.reloadPlay() //重载播放
+this.player?.restartPlay() //重新播放
+this.player?.destroyPlay() //释放。释放后播放器将不可再被使用
+this.player?.seekTo() //跳转到指定位置,传入单位为秒
+    
 <AliPlayer
     ref={(e) => this.player = e}
     style={{ flex: 1 }}
