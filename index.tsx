@@ -241,6 +241,7 @@ export class AliDow{
 
                 if(key=="onCompletion" && log.status==0){
                     log.status = 1;
+                    log.path = event.filePath;
                     await this.writeJSON(logContent)
                 }
 
@@ -255,6 +256,20 @@ export class AliDow{
 
 
 
+    }
+
+    /**
+     * 停止下载
+     */
+    public async stop(){
+        await NativeModules.RNSafeDow.stop(this.index);
+    }
+
+    /**
+     * 释放下载
+     */
+    public async release(){
+        await NativeModules.RNSafeDow.release(this.index);
     }
 
 }

@@ -116,7 +116,7 @@ public class SafeDownload extends ReactContextBaseJavaModule {
 
     private void sendEvent(ReactContext reactContext,String eventName, @Nullable WritableMap params) {
         reactContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
-            .emit(eventName, params);
+                .emit(eventName, params);
     }
 
     private void initListener(AliMediaDownloader mAliDownloader,int index,VidAuth vidAuth){
@@ -151,6 +151,9 @@ public class SafeDownload extends ReactContextBaseJavaModule {
                 params.putInt("code",200);
                 params.putString("vid",vidAuth.getVid());
                 sendEvent(reactContext, "onDowProgress", params);
+
+//                Log.i("下载进度",percent+"");
+
             }
             @Override
             public void onProcessingProgress(int percent) {
@@ -184,20 +187,37 @@ public class SafeDownload extends ReactContextBaseJavaModule {
         mAliDownloader.setOnCompletionListener(new AliMediaDownloader.OnCompletionListener() {
             @Override
             public void onCompletion() {
+
+
+
+                WritableMap params = Arguments.createMap();
+                params.putString("vid",vidAuth.getVid());
+                params.putInt("code",200);
+                params.putString("msg","下载完成");
+                params.putString("filePath",mAliDownloader.getFilePath());
+                sendEvent(reactContext, "onCompletion", params);
+
+                Log.i("hint","下载成功");
+                try {
+                    Log.i("saveFilePath",mAliDownloader.getFilePath());
+                }catch (Exception e){
+                    Log.i("查看报错",e.getMessage());
+                }
                 //下载成功
                 mAliDownloader.stop();
                 mAliDownloader.release();
                 //移除
                 mAliDownloaderArr[index] = null;
                 length--;
+            }
+        });
 
-                WritableMap params = Arguments.createMap();
-                params.putString("vid",vidAuth.getVid());
-                params.putInt("code",200);
-                params.putString("msg","下载完成");
-                sendEvent(reactContext, "onCompletion", params);
-
-                Log.i("hint","下载成功");
+        AliMediaDownloader.setConvertURLCallback(new AliMediaDownloader.ConvertURLCallback() {
+            @Override
+            public String convertURL(String s, String s1) {
+                Log.i("原始地址",s);
+                Log.i("原始格式",s1);
+                return null;
             }
         });
     }
@@ -223,7 +243,35 @@ public class SafeDownload extends ReactContextBaseJavaModule {
 
     }
 
+    @ReactMethod
+    public void stop(int index,Promise promise){
+        try {
+            if(mAliDownloaderArr[index]==null){
+                promise.reject("位置索引错误");
+            }
+            //停止下载
+            mAliDownloaderArr[index].stop();
 
+        }catch (Exception e){
+            promise.reject("位置索引错误");
+        }
+
+    }
+
+    @ReactMethod
+    public void release(int index,Promise promise){
+        try {
+            if(mAliDownloaderArr[index]==null){
+                promise.reject("位置索引错误");
+            }
+            //释放下载
+            mAliDownloaderArr[index].release();
+
+        }catch (Exception e){
+            promise.reject("位置索引错误");
+        }
+
+    }
 
     //辅助方法
     private byte[] InputStream2ByteArray(String filePath) throws IOException {
