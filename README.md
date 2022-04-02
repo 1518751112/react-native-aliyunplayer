@@ -51,6 +51,11 @@ const aliDow = new AliDow({ //auth下载
 aliDow.dow((res)=>{ 
     console.log(res,"事件")
 })
+
+//停止下载
+await aliDow.stop()
+//释放下载
+await aliDow.release()
 //获取下载记录
 const logs = await aliDow.readJSON()
 ```
