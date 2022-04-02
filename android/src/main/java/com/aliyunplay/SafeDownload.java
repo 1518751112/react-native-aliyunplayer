@@ -23,6 +23,7 @@ import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.facebook.react.uimanager.IllegalViewOperationException;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -273,6 +274,72 @@ public class SafeDownload extends ReactContextBaseJavaModule {
 
     }
 
+    @ReactMethod
+    public void getExternalFilesDir(Promise promise){
+        try {
+            File file = reactContext.getExternalFilesDir(null);
+            promise.resolve(file.getAbsolutePath());
+        }catch (Exception e){
+            promise.reject(e.getMessage());
+        }
+
+    }
+
+    @ReactMethod
+    public void getExternalCacheDir(Promise promise){
+        try {
+            File file = reactContext.getExternalCacheDir();
+            promise.resolve(file.getAbsolutePath());
+        }catch (Exception e){
+            promise.reject(e.getMessage());
+        }
+
+    }
+
+    @ReactMethod
+    public void getFilesDir(Promise promise){
+        try {
+            File file = reactContext.getFilesDir();
+            promise.resolve(file.getAbsolutePath());
+        }catch (Exception e){
+            promise.reject(e.getMessage());
+        }
+
+    }
+
+    @ReactMethod
+    public void getCacheDir(Promise promise){
+        try {
+            File file = reactContext.getCacheDir();
+            promise.resolve(file.getAbsolutePath());
+        }catch (Exception e){
+            promise.reject(e.getMessage());
+        }
+
+    }
+
+    @ReactMethod
+    public void getDir(Promise promise){
+        try {
+            File file = reactContext.getCacheDir();
+            WritableMap map = Arguments.createMap();
+            Dir dir = new Dir();
+            dir.innerFileDir = reactContext.getFilesDir().getAbsolutePath();
+            dir.outFileDir = reactContext.getExternalFilesDir(null).getAbsolutePath();
+            dir.outCacheDir = reactContext.getExternalCacheDir().getAbsolutePath();
+            dir.innerCacheDir = reactContext.getCacheDir().getAbsolutePath();
+            map.putString("innerFileDir",dir.innerFileDir);
+            map.putString("outFileDir",dir.outFileDir);
+            map.putString("outCacheDir", dir.outCacheDir);
+            map.putString("innerCacheDir", dir.innerCacheDir);
+
+            promise.resolve(map);
+        }catch (Exception e){
+            promise.reject(e.getMessage());
+        }
+
+    }
+
     //辅助方法
     private byte[] InputStream2ByteArray(String filePath) throws IOException {
 
@@ -324,4 +391,11 @@ class DowConfig{
     String vid;
     String playAuth;
     String region;
+}
+
+class Dir{
+    String outFileDir;
+    String innerFileDir;
+    String outCacheDir;
+    String innerCacheDir;
 }

@@ -58,6 +58,14 @@ await aliDow.stop()
 await aliDow.release()
 //获取下载记录
 const logs = await aliDow.readJSON()
+// AliDow.dirs
+
+interface Dir{// android 软件文件路径
+    outFileDir?:string; 
+    innerFileDir?:string;
+    outCacheDir?:string;
+    innerCacheDir?:string;
+}
 ```
 
 

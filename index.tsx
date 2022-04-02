@@ -130,7 +130,8 @@ export class AliPlayer extends Component<AliPlayerProps>{
 
 import RNFetchBlob from "rn-fetch-blob";
 
-const path:string = RNFetchBlob.fs.dirs.DownloadDir;
+
+const dirs:Dir = {}
 const configName:string = "ali.config";
 //下载器
 export class AliDow{
@@ -142,9 +143,9 @@ export class AliDow{
     //onPrepared:预处理;onDowProgress:下载进度;onProcessing:处理进度;onError:错误信息; onCompletion:完成回调
 
 
-    public static readonly path:string = path;
+    public static readonly dirs:Dir = dirs;
 
-    public readonly path:string = path;
+    public readonly dirs:Dir = dirs;
 
     //配置文件名称
     public static readonly configName:string = configName;
@@ -155,20 +156,20 @@ export class AliDow{
     //--------辅助函数--------
     //文件配置读取
     public static async readJSON(){
-        return JSON.parse(await RNFetchBlob.fs.readFile(`${this.path}/${configName}`,'utf8')); //读取json
+        return JSON.parse(await RNFetchBlob.fs.readFile(`${this.dirs.innerFileDir}/${configName}`,'utf8')); //读取json
     };
 
     public async readJSON(){
-        return JSON.parse(await RNFetchBlob.fs.readFile(`${this.path}/${configName}`,'utf8')); //读取json
+        return JSON.parse(await RNFetchBlob.fs.readFile(`${this.dirs.innerFileDir}/${configName}`,'utf8')); //读取json
     };
 
     //文件配置保存
     public static async writeJSON(d:any){
-        return await RNFetchBlob.fs.writeFile(`${this.path}/${configName}`, JSON.stringify(d),'utf8'); //保存json
+        return await RNFetchBlob.fs.writeFile(`${this.dirs.innerFileDir}/${configName}`, JSON.stringify(d),'utf8'); //保存json
     };
 
     public async writeJSON( d:any){
-        return await RNFetchBlob.fs.writeFile(`${this.path}/${configName}`, JSON.stringify(d),'utf8'); //保存json
+        return await RNFetchBlob.fs.writeFile(`${this.dirs.innerFileDir}/${configName}`, JSON.stringify(d),'utf8'); //保存json
     };
 
 
@@ -190,7 +191,7 @@ export class AliDow{
         Count.size++
         //获取记录
         let logContent:AliConfig[] = []
-        const logFileName = this.path+'/'+this.configName
+        const logFileName = this.dirs.innerFileDir+'/'+this.configName
         if (await RNFetchBlob.fs.exists(logFileName)){
             //读取数据
             logContent =await this.readJSON()
@@ -293,5 +294,20 @@ interface AliConfig{
     status:number;
 }
 
+interface Dir{
+    outFileDir?:string;
+    innerFileDir?:string;
+    outCacheDir?:string;
+    innerCacheDir?:string;
+}
+
+const init = async ()=>{
+    const dir:Dir=await NativeModules.RNSafeDow.getDir()
+    dirs.innerFileDir=dir.innerFileDir
+    dirs.outFileDir=dir.outFileDir
+    dirs.outCacheDir=dir.outCacheDir
+    dirs.innerCacheDir=dir.innerCacheDir
+}
+init()
 
 export default {AliPlayer,AliDow}

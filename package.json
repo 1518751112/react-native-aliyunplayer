@@ -1,6 +1,6 @@
 {
   "name": "@tg1518/react-native-lewin-aliyunplayer",
-  "version": "1.1.43",
+  "version": "1.1.5",
   "description": "阿里云视频播放器，react native版本",
   "main": "main.js",
   "nativePackage": true,
