@@ -6,7 +6,6 @@
 //
 
 #import "RNAliyunPlayerManager.h"
-#import "Source.h"
 
 static NSMutableArray *videos;
 
