@@ -48,11 +48,25 @@
 }
 
 //定义要暴露属性
-- (void)setSource:(NSString *)source{
+- (void)setSource:(NSDictionary *)source{
   _source = source;
-  AVPUrlSource * urlSource = [[AVPUrlSource alloc] urlWithString:[source stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
-  [self.player setUrlSource:urlSource];
-  [self.player prepare];
+    NSLog(@"测试:%@,vid%@",[source objectForKey: @"type"],[source objectForKey: @"vid"]);
+    if([[source objectForKey: @"type"] isEqual: @"url"]){
+        AVPUrlSource * urlSource = [[AVPUrlSource alloc] urlWithString:[[source objectForKey: @"url"] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+          [self.player setUrlSource:urlSource];
+
+    }else if([[source objectForKey: @"type"] isEqual: @"auth"]){
+        AVPVidAuthSource *authSource = [[AVPVidAuthSource alloc] init];
+        authSource.vid = [source objectForKey: @"vid"];
+        authSource.playAuth = [source objectForKey: @"playAuth"]; // 播放凭证
+        authSource.region = [source objectForKey: @"region"]; // 点播服务的接入地域，默认为cn-shanghai
+        NSLog(@"播放凭证:%@,region%@",[source objectForKey: @"playAuth"],[source objectForKey: @"region"]);
+        [self.player setAuthSource:authSource];
+    }else{
+        return;
+    }
+
+    [self.player prepare];
 }
 -(void)setSetAutoPlay:(BOOL)setAutoPlay{
   _setAutoPlay = setAutoPlay;
@@ -162,7 +176,7 @@
     else{
         [self.player selectTrack:selectBitrateIndex];
     }
-    
+
 }
 
 #pragma mark - AVPDelegate
@@ -174,7 +188,7 @@
 - (void)onError:(AliPlayer*)player errorModel:(AVPErrorModel *)errorModel {
   //提示错误，及stop播放
   self.onAliError(@{@"code":@(errorModel.code),@"message":errorModel.message});
-  
+
 }
 /**
  @brief 播放器事件回调
@@ -204,7 +218,7 @@
       }
       break;
     case AVPEventFirstRenderedStart:
-          
+
       // 首帧显示
       if (self.onAliRenderingStart) {
         self.onAliRenderingStart(@{@"code":@"onRenderingStart", @"duration":@(mode.duration/1000), @"width": @(width), @"height": @(height)});
@@ -219,7 +233,7 @@
     case AVPEventLoadingStart:
       // 缓冲开始
       if (self.onAliLoadingBegin) {
-          
+
           self.onAliLoadingBegin(@{@"code":@"onAliLoadingBegin", @"duration":@(mode.duration/1000), @"width": @(width), @"height": @(height)});
       }
       break;
@@ -300,9 +314,9 @@
                                         @"bitrate":@(track.trackBitrate)
                 }];
             }
-            
+
         }
-        
+
         self.onAliBitrateReady(@{@"bitrates":trackArray});
     }
 }

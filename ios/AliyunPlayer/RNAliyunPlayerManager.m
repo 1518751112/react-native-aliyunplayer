@@ -6,6 +6,7 @@
 //
 
 #import "RNAliyunPlayerManager.h"
+#import "Source.h"
 
 static NSMutableArray *videos;
 
@@ -19,8 +20,8 @@ static NSMutableArray *videos;
 
 RCT_EXPORT_MODULE(RNAliplayer)
 //暴露属性
-RCT_EXPORT_VIEW_PROPERTY(source, NSString)
 RCT_EXPORT_VIEW_PROPERTY(setAutoPlay, BOOL)
+RCT_EXPORT_VIEW_PROPERTY(source, NSDictionary)
 RCT_EXPORT_VIEW_PROPERTY(setLoop, BOOL)
 RCT_EXPORT_VIEW_PROPERTY(setMute, BOOL)
 RCT_EXPORT_VIEW_PROPERTY(enableHardwareDecoder, BOOL)
@@ -33,7 +34,6 @@ RCT_EXPORT_VIEW_PROPERTY(setRotateMode, int)
 RCT_EXPORT_VIEW_PROPERTY(setScaleMode, int)
 RCT_EXPORT_VIEW_PROPERTY(configHeader, NSArray)
 RCT_EXPORT_VIEW_PROPERTY(selectBitrateIndex, int)
-
 //暴露方法（原生调用，js回调）
 RCT_EXPORT_VIEW_PROPERTY(onAliCompletion, RCTBubblingEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onAliError, RCTBubblingEventBlock)

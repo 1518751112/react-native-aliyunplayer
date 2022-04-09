@@ -17,7 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic,strong) AliPlayer * player;
 
 //定义要暴露属性
-@property(nonatomic,strong) NSString * source;
+@property(nonatomic,strong) NSDictionary * source;
 @property(nonatomic,assign) BOOL  setAutoPlay;
 @property(nonatomic,assign) BOOL  setLoop;
 @property(nonatomic,assign) BOOL  setMute;
