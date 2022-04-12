@@ -50,22 +50,22 @@
 //定义要暴露属性
 - (void)setSource:(NSDictionary *)source{
   _source = source;
-    NSLog(@"测试:%@,vid%@",[source objectForKey: @"type"],[source objectForKey: @"vid"]);
+//    NSLog(@"测试:%@,vid%@",[source objectForKey: @"type"],[source objectForKey: @"vid"]);
     if([[source objectForKey: @"type"] isEqual: @"url"]){
-        AVPUrlSource * urlSource = [[AVPUrlSource alloc] urlWithString:[[source objectForKey: @"url"] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
-          [self.player setUrlSource:urlSource];
-
+        AVPUrlSource *urlSource = [[AVPUrlSource alloc] urlWithString:source[@"url"]]; //播放地址，可以是第三方点播地址，或阿里云点播服务中的播放地址。
+        [self.player setUrlSource:urlSource];
+//        NSLog(@"url播放:%@,url%@",[source objectForKey: @"type"],[source objectForKey: @"url"]);
     }else if([[source objectForKey: @"type"] isEqual: @"auth"]){
         AVPVidAuthSource *authSource = [[AVPVidAuthSource alloc] init];
         authSource.vid = [source objectForKey: @"vid"];
         authSource.playAuth = [source objectForKey: @"playAuth"]; // 播放凭证
         authSource.region = [source objectForKey: @"region"]; // 点播服务的接入地域，默认为cn-shanghai
-        NSLog(@"播放凭证:%@,region%@",[source objectForKey: @"playAuth"],[source objectForKey: @"region"]);
+//        NSLog(@"播放凭证:%@,region%@",[source objectForKey: @"playAuth"],[source objectForKey: @"region"]);
         [self.player setAuthSource:authSource];
     }else{
         return;
     }
-
+    
     [self.player prepare];
 }
 -(void)setSetAutoPlay:(BOOL)setAutoPlay{

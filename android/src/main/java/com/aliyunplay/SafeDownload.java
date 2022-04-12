@@ -237,7 +237,7 @@ public class SafeDownload extends ReactContextBaseJavaModule {
             //开始下载
             mAliDownloaderArr[index].updateSource(aliyunVidAuth);
             mAliDownloaderArr[index].start();
-
+            promise.resolve("成功");
         }catch (Exception e){
             promise.reject("位置索引错误");
         }
@@ -252,7 +252,7 @@ public class SafeDownload extends ReactContextBaseJavaModule {
             }
             //停止下载
             mAliDownloaderArr[index].stop();
-
+            promise.resolve("成功");
         }catch (Exception e){
             promise.reject("位置索引错误");
         }
@@ -267,7 +267,7 @@ public class SafeDownload extends ReactContextBaseJavaModule {
             }
             //释放下载
             mAliDownloaderArr[index].release();
-
+            promise.resolve("成功");
         }catch (Exception e){
             promise.reject("位置索引错误");
         }

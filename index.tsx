@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, requireNativeComponent, findNodeHandle, StyleProp, ViewStyle, UIManager, NativeModules, NativeEventEmitter } from 'react-native'
+import { View, requireNativeComponent, findNodeHandle, StyleProp, ViewStyle, UIManager, NativeModules, NativeEventEmitter ,Platform} from 'react-native'
 var AliyunPlayer = requireNativeComponent('RNAliplayer');
 
 enum IScaleMode {
@@ -156,20 +156,20 @@ export class AliDow{
     //--------辅助函数--------
     //文件配置读取
     public static async readJSON(){
-        return JSON.parse(await RNFetchBlob.fs.readFile(`${this.dirs.innerFileDir}/${configName}`,'utf8')); //读取json
+        return JSON.parse(await RNFetchBlob.fs.readFile(`${Platform.OS =="android"?this.dirs.innerFileDir:this.dirs.iosFileDir}/${configName}`,'utf8')); //读取json
     };
 
     public async readJSON(){
-        return JSON.parse(await RNFetchBlob.fs.readFile(`${this.dirs.innerFileDir}/${configName}`,'utf8')); //读取json
+        return JSON.parse(await RNFetchBlob.fs.readFile(`${Platform.OS =="android"?this.dirs.innerFileDir:this.dirs.iosFileDir}/${configName}`,'utf8')); //读取json
     };
 
     //文件配置保存
     public static async writeJSON(d:any){
-        return await RNFetchBlob.fs.writeFile(`${this.dirs.innerFileDir}/${configName}`, JSON.stringify(d),'utf8'); //保存json
+        return await RNFetchBlob.fs.writeFile(`${Platform.OS =="android"?this.dirs.innerFileDir:this.dirs.iosFileDir}/${configName}`, JSON.stringify(d),'utf8'); //保存json
     };
 
     public async writeJSON( d:any){
-        return await RNFetchBlob.fs.writeFile(`${this.dirs.innerFileDir}/${configName}`, JSON.stringify(d),'utf8'); //保存json
+        return await RNFetchBlob.fs.writeFile(`${Platform.OS =="android"?this.dirs.innerFileDir:this.dirs.iosFileDir}/${configName}`, JSON.stringify(d),'utf8'); //保存json
     };
 
 
@@ -191,7 +191,7 @@ export class AliDow{
         Count.size++
         //获取记录
         let logContent:AliConfig[] = []
-        const logFileName = this.dirs.innerFileDir+'/'+this.configName
+        const logFileName = Platform.OS =="android"?this.dirs.innerFileDir:this.dirs.iosFileDir+'/'+this.configName
         if (await RNFetchBlob.fs.exists(logFileName)){
             //读取数据
             logContent =await this.readJSON()
@@ -203,7 +203,12 @@ export class AliDow{
 
     //事件回调
     private initEvent(logContent:AliConfig[],callback?:(res:any)=>void){
-        const eventEmitter = new NativeEventEmitter(NativeModules.ToastExample);
+        let eventEmitter ;
+        if(Platform.OS =="android"){
+        eventEmitter = new NativeEventEmitter(NativeModules.ToastExample);
+        }else{
+            eventEmitter = new NativeEventEmitter(NativeModules.RNSafeDow);
+        }
         //读取单个记录
         let ins =-1;
         let log:AliConfig = {
@@ -299,14 +304,24 @@ interface Dir{
     innerFileDir?:string;
     outCacheDir?:string;
     innerCacheDir?:string;
+    iosFileDir?:string;
+    iosCacheDir?:string;
+    iosTempDir?:string;
 }
 
 const init = async ()=>{
-    const dir:Dir=await NativeModules.RNSafeDow.getDir()
-    dirs.innerFileDir=dir.innerFileDir
-    dirs.outFileDir=dir.outFileDir
-    dirs.outCacheDir=dir.outCacheDir
-    dirs.innerCacheDir=dir.innerCacheDir
+    const dir:Dir=await NativeModules.RNSafeDow.getDir();
+    if(Platform.OS =="android"){
+        dirs.innerFileDir=dir.innerFileDir;
+        dirs.outFileDir=dir.outFileDir;
+        dirs.outCacheDir=dir.outCacheDir;
+        dirs.innerCacheDir=dir.innerCacheDir;
+    }else{
+        dirs.iosFileDir = dir.iosFileDir;
+        dirs.iosCacheDir = dir.iosCacheDir;
+        dirs.iosTempDir = dir.iosTempDir;
+    }
+
 }
 init()
 
