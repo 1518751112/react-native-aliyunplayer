@@ -33,8 +33,12 @@ allprojects {
     }
 }
 ```
-### 3: android使用安全下载功能需要替换 massets目录下的encryptedApp.dat解密文件
+### 3: android使用安全下载功能需要在android>app>src>main>assets 目录下添加encryptedApp.dat解密文件
+<img src="https://os-c1.ccwtech.net/ck1/uploads/a924N1/image.png"><br />
+### 4: ios使用安全下载功能需要在ios>ck1(项目主目录) massets目录下添加encryptedApp.dat解密文件
+<img src="https://os-c1.ccwtech.net/ck1/uploads/JL9Q-1/image.png"><br />
 
+## 注意ios与android的加密文件不是同一个：<a href="https://help.aliyun.com/document_detail/57920.html?userCode=ahxhg8oc">安全文件获取问题</a>
 ## 下载组件
 ```javascript
 import AliModule from "@tg1518/react-native-lewin-aliyunplayer";
