@@ -590,8 +590,8 @@ public class RNAliPlayerManager extends ViewGroupManager<AliSurfaceView> {
     }
 
     @Override
-    public void onCatalystInstanceDestroy() {
-        super.onCatalystInstanceDestroy();
+    public void invalidate() {
+        super.invalidate();
         stopAllVideo();
     }
 }

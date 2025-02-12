@@ -6,6 +6,9 @@
 - [Install](#install)
 - [Usage](#usage)
 
+## 支持版本
+2025/1/17
+支持rn 0.76.6
 
 ## Install
 ### 1: yarn add 或者npm install

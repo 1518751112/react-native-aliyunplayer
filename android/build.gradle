@@ -24,9 +24,17 @@ android {
 
 }
 
+apply plugin: 'maven-publish'
+repositories {
+    mavenLocal()
+    maven { url "https://maven.aliyun.com/repository/releases" }
+}
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "com.facebook.react:react-native:+"  // From node_modules
-    implementation 'com.aliyun.sdk.android:AliyunPlayer:5.4.2.0-full'
+    implementation 'com.aliyun.sdk.android:AliyunPlayer:6.12.0-full'
+    //引入本地libs aar
+//    implementation(name: 'AliyunPlayer', ext: 'AliyunPlayer-6.21.0-full.aar')
 }
+
