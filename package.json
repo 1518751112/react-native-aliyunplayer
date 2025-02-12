@@ -1,6 +1,6 @@
 {
   "name": "@tg1518/react-native-lewin-aliyunplayer",
-  "version": "2.0.1",
+  "version": "2.0.3",
   "description": "阿里云视频播放器，react native版本",
   "main": "main.js",
   "nativePackage": true,
@@ -46,6 +46,5 @@
   },
   "homepage": "https://github.com/1518751112/react-native-aliyunplayer#readme",
   "dependencies": {
-
   }
 }

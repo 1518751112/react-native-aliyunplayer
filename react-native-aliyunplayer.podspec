@@ -8,17 +8,17 @@ Pod::Spec.new do |s|
   s.summary      = "Expose config variables to React Native apps"
   s.author       = "Pedro Belo"
 
-  s.homepage     = "https://github.com/LewinJun/react-native-aliyunplayer"
+  s.homepage     = "https://github.com/1518751112/react-native-aliyunplayer"
 
   s.license      = "MIT"
   s.ios.deployment_target = "9.0"
   s.tvos.deployment_target = "9.0"
 
-  s.source       = { :git => "https://github.com/LewinJun/react-native-aliyunplayer.git", :tag => "#{s.version}" }
+  s.source       = { :git => "https://github.com/1518751112/react-native-aliyunplayer.git", :tag => "#{s.version}" }
 
   s.source_files  = "ios/AliyunPlayer/**/*.{h,m}"
   s.requires_arc = true
 
   s.dependency "React"
-  s.dependency 'AliPlayerSDK_iOS'
+  s.dependency 'AliPlayerSDK_iOS','6.12.0'
 end
