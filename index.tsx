@@ -128,7 +128,7 @@ export class AliPlayer extends Component<AliPlayerProps>{
     }
 }
 
-import RNFetchBlob from "rn-fetch-blob";
+import RNFetchBlob from "react-native-blob-util";
 
 
 const dirs:Dir = {}
