@@ -7,8 +7,10 @@
 - [Usage](#usage)
 
 ## 支持版本
-2025/1/17
+2025/2/14
 支持rn 0.76.6
+android.AliyunPlayer:6.12.0
+ios.AliyunPlayer:6.12.0
 
 ## Install
 ### 1: yarn add 或者npm install
@@ -36,45 +38,52 @@ allprojects {
     }
 }
 ```
-### 3: android使用安全下载功能需要在android>app>src>main>assets 目录下添加encryptedApp.dat解密文件
-<img src="https://os-c1.ccwtech.net/ck1/uploads/a924N1/image.png"><br />
-### 4: ios使用安全下载功能需要在ios>ck1(项目主目录) massets目录下添加encryptedApp.dat解密文件
-<img src="https://os-c1.ccwtech.net/ck1/uploads/JL9Q-1/image.png"><br />
+### 3: android需要配置License
+将证书文件拷贝到Android Studio项目中的assets目录下。
+使用全球配置，不用国际的
+具体操作：https://help.aliyun.com/zh/vod/developer-reference/quick-integration-1
+若配置License后校验失败，您可以检查<meta-data>节点是否处于<application>元素下面，且<meta-data>的name是否正确。若未能解决问题，您可以参考License相关常见问题进行排查。
 
-## 注意ios与android的加密文件不是同一个：<a href="https://help.aliyun.com/document_detail/57920.html?userCode=ahxhg8oc">安全文件获取问题</a>
-## 下载组件
-```javascript
-import AliModule from "@tg1518/react-native-lewin-aliyunplayer";
-const {AliDow,AliPlayer} = AliModule
+针对国际站用户，若需使用播放器SDK，且播放器SDK为6.14.0及以上版本，请务必配置国际站环境License；若不使用播放器SDK，可以仅配置全球环境License。
 
-const aliDow = new AliDow({ //auth下载
-    path:"保存地址",
-    vid:"视频id",
-    playAuth:"授权码",
-    name:"名称"
-});
+您可以同时接入2套License（1套全球环境License，1套国际站环境License），后续在App每次启动后，通过配置播放器SDK的服务环境，来指定播放器的运行环境。播放器运行过程中，不支持切换环境。
+```xml
+// 全球环境配置License（默认配置）
+<meta-data
+        android:name="com.aliyun.alivc_license.licensekey"
+        android:value="foIVziMaUHaRqgDyhf6b6eb8fcf014af39535d0720a32****"/>  <!-- TODO:请设置您的 LicenseKey值-->
+<meta-data
+android:name="com.aliyun.alivc_license.licensefile"
+android:value="assets/cert/release.crt"/>  <!-- TODO:请设置您的 LicenseFile文件路径-->
 
-//开始下载事件回调
-aliDow.dow((res)=>{ 
-    console.log(res,"事件")
-})
 
-//停止下载
-await aliDow.stop()
-//释放下载
-await aliDow.release()
-//获取下载记录
-const logs = await aliDow.readJSON()
-// AliDow.dirs
-
-interface Dir{// android 软件文件路径
-    outFileDir?:string; 
-    innerFileDir?:string;
-    outCacheDir?:string;
-    innerCacheDir?:string;
-}
+        // 国际站环境配置License，手动在末尾添加_SEA
+<meta-data
+android:name="com.aliyun.alivc_license.licensekey_SEA"
+android:value="f6b6foIVziMaUHaRqgDyheb8fcf014af39535d0a32720****"/>  <!-- TODO:请设置您的 LicenseKey值-->
+<meta-data
+android:name="com.aliyun.alivc_license.licensefile_SEA"
+android:value="assets/cert/release.crt"/>  <!-- TODO:请设置您的 LicenseFile文件路径-->
 ```
 
+### 4: android需要配置License
+在Xcode工程里，将获取到的证书文件AliVideoCert-********.crt拷贝到Xcode的项目中，建议放到AppSupportFiles目录下，也可以放到沙箱或者其他路径。并在Target Membership中选中当前项目。
+使用全球配置，不用国际的
+具体操作：https://help.aliyun.com/zh/vod/developer-reference/quick-integration
+```xml
+//全球环境License配置（默认配置）
+<key>AlivcLicenseFile</key>
+<string>XXX</string>
+<key>AlivcLicenseKey</key>
+<string>foIVziMaUHaRqgDyhf6b6eb8fcf014af39535d0720a32****</string>
+
+
+        // 国际站环境License配置，手动在末尾添加_SEA
+<key>AlivcLicenseFile_SEA</key>
+<string>XXX</string>
+<key>AlivcLicenseKey_SEA</key>
+<string>f6b6efoIVziMaUHaRqgDyhb8fcf014af39535d0a32072****</string>
+```
 
 ## 播放组件
 ```javascript
